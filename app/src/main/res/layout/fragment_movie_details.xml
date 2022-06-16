@@ -1,14 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".modules.moviedetails.presentation.MovieDetailsFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".modules.moviedetails.presentation.MovieDetailsFragment"
+    android:background="?attr/android:colorBackground">
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
 
-</FrameLayout>
+        <ImageView
+            android:id="@+id/movie_image"
+            android:layout_width="170dp"
+            android:layout_height="220dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="20dp"
+            android:contentDescription="Movie image" />
+
+        <TextView
+            android:id="@+id/movie_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/movie_image"
+            app:layout_constraintStart_toEndOf="@id/movie_image"
+            android:layout_marginStart="40dp"
+            android:textColor="?attr/colorOnBackground"/>
+
+        <TextView
+            android:id="@+id/movie_year_caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/movie_name"
+            app:layout_constraintStart_toStartOf="@id/movie_name"
+            android:layout_marginTop="10dp"
+            android:textColor="?attr/colorOnBackground"
+            android:text="Год: "/>
+
+        <TextView
+            android:id="@+id/movie_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnBackground"
+            android:text="1999"
+            app:layout_constraintBottom_toBottomOf="@id/movie_year_caption"
+            app:layout_constraintStart_toEndOf="@id/movie_year_caption"
+            app:layout_constraintTop_toTopOf="@id/movie_year_caption" />
+
+        <TextView
+            android:id="@+id/movie_rate_caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/movie_year_caption"
+            app:layout_constraintStart_toStartOf="@id/movie_year_caption"
+            android:layout_marginTop="10dp"
+            android:textColor="?attr/colorOnBackground"
+            android:text="Рейтинг: "/>
+
+
+        <TextView
+            android:id="@+id/movie_rate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnBackground"
+            android:text="6.09"
+            app:layout_constraintBottom_toBottomOf="@id/movie_rate_caption"
+            app:layout_constraintStart_toEndOf="@id/movie_rate_caption"
+            app:layout_constraintTop_toTopOf="@id/movie_rate_caption" />
+
+        <TextView
+            android:id="@+id/movie_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/movie_image"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_margin="20dp"
+            android:textColor="?attr/colorOnBackground" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
