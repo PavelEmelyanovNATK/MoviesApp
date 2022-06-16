@@ -59,10 +59,16 @@ class MoviesListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 genre.binding.genreName.text = item.name
                 val backgroundResource = if(item.isSelected) R.drawable.genre_item_background_selected else R.drawable.genre_item_background
                 genre.binding.root.setBackgroundResource(backgroundResource)
+                genre.binding.root.setOnClickListener {
+                    item.onClick()
+                }
             }
             is MoviesRecyclerItem.Movie -> {
                 val movie = holder as MovieViewHolder
                 movie.binding.movieName.text = item.name
+                movie.binding.root.setOnClickListener {
+                    item.onClick()
+                }
             }
         }
     }
@@ -88,13 +94,14 @@ class MoviesListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         private val movies: MutableList<MoviesRecyclerItem.Movie> = mutableListOf()
 
         fun build(): List<MoviesRecyclerItem> = ArrayList<MoviesRecyclerItem>(genres.size+movies.size+2).apply {
+            add(MoviesRecyclerItem.Header("Жанры"))
             addAll(genres)
             add(MoviesRecyclerItem.Header("Фильмы"))
             addAll(movies)
         }
 
-        fun addGenre(name: String, isSelected: Boolean) = genres.add(MoviesRecyclerItem.Genre(name, isSelected))
-        fun addMovie(name: String, imageUrl: String) = movies.add(MoviesRecyclerItem.Movie(name, imageUrl))
+        fun addGenre(name: String, isSelected: Boolean, onClick: () -> Unit) = genres.add(MoviesRecyclerItem.Genre(name, isSelected, onClick))
+        fun addMovie(name: String, imageUrl: String, onClick: () -> Unit) = movies.add(MoviesRecyclerItem.Movie(name, imageUrl, onClick))
     }
 
     companion object {
