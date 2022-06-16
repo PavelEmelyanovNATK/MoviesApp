@@ -16,6 +16,7 @@ class MoviesListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMoviesListBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 }
