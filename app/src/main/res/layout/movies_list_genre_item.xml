@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/genre_item_background"
-    android:padding="10dp">
+    android:padding="10dp"
+    android:layout_margin="5dp">
     <TextView
+        android:id="@+id/genre_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:textColor="?attr/colorOnSecondary"
-        android:text="Test Genre"/>
+        android:text="Test Genre" />
 </FrameLayout>

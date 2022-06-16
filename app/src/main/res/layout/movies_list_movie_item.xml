@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="200dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="8dp">
+    app:cardCornerRadius="8dp"
+    android:layout_margin="5dp">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -38,7 +39,8 @@
             android:background="@color/transparent_black"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/movie_name"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="@id/movie_title_bg"
             app:layout_constraintTop_toTopOf="@id/movie_title_bg"
@@ -48,6 +50,7 @@
             android:maxLines="2"
             android:ellipsize="end"
             android:textColor="@color/white"
+            android:textAlignment="center"
             android:text="TEasdasd" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
