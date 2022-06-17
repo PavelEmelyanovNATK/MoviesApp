@@ -108,6 +108,5 @@ class MoviesListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         const val HEADER_VIEW_TYPE = 1
         const val GENRE_VIEW_TYPE = 2
         const val MOVIE_VIEW_TYPE = 3
-
     }
 }

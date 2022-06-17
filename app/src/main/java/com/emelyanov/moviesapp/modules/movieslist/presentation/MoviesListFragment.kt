@@ -1,8 +1,6 @@
 package com.emelyanov.moviesapp.modules.movieslist.presentation
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,21 +8,30 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.emelyanov.moviesapp.databinding.FragmentMoviesListBinding
 import com.emelyanov.moviesapp.modules.movieslist.domain.MoviesListPresenter
+import com.emelyanov.moviesapp.modules.movieslist.domain.utils.MoviesListPresenterFactory
+import com.emelyanov.moviesapp.shared.domain.BasePresenterFactory
 import com.emelyanov.moviesapp.shared.domain.BaseView
+import com.emelyanov.moviesapp.shared.presentation.PresenterFragment
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-class MoviesListFragment : Fragment(), BaseView<MoviesListPresenter.ViewState> {
+typealias VS = MoviesListPresenter.ViewState
+typealias V = BaseView<VS>
+typealias P = MoviesListPresenter
+
+@AndroidEntryPoint
+class MoviesListFragment : PresenterFragment<VS, V, P>(), V {
     lateinit var binding: FragmentMoviesListBinding
-    private lateinit var presenter: MoviesListPresenter
     private val moviesAdapter = MoviesListAdapter()
+
+    @Inject
+    lateinit var presenterFactory: MoviesListPresenterFactory
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMoviesListBinding.inflate(inflater, container, false)
-
-        presenter = MoviesListPresenter()
-        presenter.bindView(this)
-        presenter.loadMovies()
 
         val layoutManager = GridLayoutManager(requireContext(), 2, RecyclerView.VERTICAL, false).apply {
             spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
@@ -52,21 +59,28 @@ class MoviesListFragment : Fragment(), BaseView<MoviesListPresenter.ViewState> {
                     addGenre(it.name, it.isSelected) { presenter.onGenreClick(it.name) }
                 }
                 viewState.movies.forEach {
-                    addMovie(it.name, it.imageUrl) {}
+                    addMovie(it.localizedName, it.imageUrl) {}
                 }
             }
         }
         binding.moviesProgressbar.visibility = if(viewState is MoviesListPresenter.ViewState.Loading) View.VISIBLE else View.GONE
     }
 
-    override fun onStop() {
-        super.onStop()
-        presenter.unbindView()
-        Log.d("Fragment", "Stop")
+    override fun onResume() {
+        super.onResume()
+        presenter.bindView(this)
+
+        if(isFirstLoaded) {
+            presenter.loadMovies()
+        }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        presenter.onDestroy()
+    override fun onPause() {
+        super.onPause()
+        presenter.unbindView()
+    }
+
+    override fun createPresenterFactory(): BasePresenterFactory<P> {
+        return presenterFactory
     }
 }
