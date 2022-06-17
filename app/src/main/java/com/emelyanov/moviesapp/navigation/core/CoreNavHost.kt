@@ -12,7 +12,7 @@ import com.emelyanov.moviesapp.modules.moviedetails.presentation.MovieDetailsFra
 import kotlinx.coroutines.launch
 
 /**
- * Запускает слущателя точки назначения.
+ * Запускает обработчик навигации.
  * @param coreNavProvider - провайдер навигации, который будет прослушиваться
  * @param coreNavController - контроллер навигации
  */

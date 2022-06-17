@@ -6,6 +6,9 @@ import com.emelyanov.moviesapp.shared.domain.BasePresenter
 import com.emelyanov.moviesapp.shared.domain.BasePresenterFactory
 import com.emelyanov.moviesapp.shared.domain.BaseView
 
+/**
+ * Загручик для сохранения презентера при смене конфигурации.
+ */
 class PresenterLoader<ViewState, View: BaseView<ViewState>, Presenter: BasePresenter<View, ViewState>>(
     context: Context,
     private val presenterFactory: BasePresenterFactory<Presenter>

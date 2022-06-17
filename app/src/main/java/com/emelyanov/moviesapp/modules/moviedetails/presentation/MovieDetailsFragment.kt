@@ -54,16 +54,6 @@ class MovieDetailsFragment : PresenterFragment<VS, V, P>(), V {
         presenter.unbindView()
     }
 
-    companion object {
-        private const val MOVIE_ID_KEY = "movieIdKey123"
-
-        fun createArguments(id: Int): Bundle {
-            return bundleOf(
-                MOVIE_ID_KEY to id
-            )
-        }
-    }
-
     override fun createPresenterFactory(): BasePresenterFactory<P> = presenterFactory
 
     override fun processState(viewState: VS) {
@@ -99,6 +89,16 @@ class MovieDetailsFragment : PresenterFragment<VS, V, P>(), V {
 
         if(viewState is MovieDetailsPresenter.ViewState.Error) {
             binding.errorState.refreshButton.setOnClickListener { presenter.loadInfo(movieId) }
+        }
+    }
+
+    companion object {
+        private const val MOVIE_ID_KEY = "movieIdKey123"
+
+        fun createArguments(id: Int): Bundle {
+            return bundleOf(
+                MOVIE_ID_KEY to id
+            )
         }
     }
 }

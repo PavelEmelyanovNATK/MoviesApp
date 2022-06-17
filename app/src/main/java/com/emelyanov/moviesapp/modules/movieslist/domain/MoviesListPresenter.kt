@@ -12,7 +12,6 @@ import com.emelyanov.moviesapp.shared.domain.BasePresenter
 import com.emelyanov.moviesapp.shared.domain.BaseView
 import com.emelyanov.moviesapp.shared.domain.services.moviesrepository.IMoviesRepository
 import com.emelyanov.moviesapp.shared.domain.services.stringextractor.IStringExtractor
-import com.emelyanov.moviesapp.shared.domain.services.stringextractor.StringExtractor
 import com.emelyanov.moviesapp.shared.domain.utils.requestExceptionHandler
 import kotlinx.coroutines.launch
 
@@ -41,17 +40,24 @@ class MoviesListPresenter(
                     val state = viewState as ViewState.Presentation
                     viewState = ViewState.Loading
                     val genres = moviesRepository.getGenres()
-                    val curGenre = genres.find { it.name == genre } ?: return@listExceptionHandler
+                    val clickedGenre = genres.find { it.name == genre }
+                    if(clickedGenre == null) {
+                        loadMovies()
+                        return@listExceptionHandler
+                    }
                     val prevGenre = state.genres.find { it.isSelected }
-                    val movies = if(curGenre.name != prevGenre?.name)
-                        moviesRepository.getMovies(curGenre.name)
-                    else
+
+                    //Если предыдущий жанр равен текущему, то выделение снимается, фильмы загружаются без фильтра
+                    val movies = if(clickedGenre.name == prevGenre?.name)
                         moviesRepository.getMovies()
+                    else
+                        moviesRepository.getMovies(clickedGenre.name)
 
                     viewState = ViewState.Presentation(
                         genres = genres.map {
                             it.toViewGenre(
-                                isSelected = curGenre.name == it.name && curGenre.name != prevGenre?.name
+                                //Выделяем совпадающий жанр только в случе, если он не был выделен, т.е. не равен предыдущему выделенному
+                                isSelected = clickedGenre.name == it.name && clickedGenre.name != prevGenre?.name
                             )
                         },
                         movies = movies.map { it.toViewMovie() }

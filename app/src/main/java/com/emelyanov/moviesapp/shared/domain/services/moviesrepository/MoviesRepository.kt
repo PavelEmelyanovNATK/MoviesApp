@@ -12,13 +12,6 @@ class MoviesRepository(
 ) : IMoviesRepository {
     private var rawMovies: List<MovieResponse> = listOf()
 
-    /**
-     * @throws ServerNotRespondingException
-     * @throws ConnectionErrorException
-     * @throws NotFoundException
-     * @throws BadRequestException
-     * @throws Exception
-     */
     override suspend fun refreshData() {
         rawMovies = requestWrapper {
             moviesApi.getRawMoviesList()

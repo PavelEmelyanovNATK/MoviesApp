@@ -6,11 +6,12 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
 /**
+ * Метод, переводящий системные ошибки в ошибки запросов.
  * @throws ServerNotRespondingException
  * @throws ConnectionErrorException
  * @throws NotFoundException
  * @throws BadRequestException
- * @throws Exception
+ * @throws Exception - неописанная ошибка.
  */
 suspend fun <T> requestWrapper(request: suspend () -> T) : T {
     return try {
@@ -30,6 +31,9 @@ suspend fun <T> requestWrapper(request: suspend () -> T) : T {
     }
 }
 
+/**
+ * Метод, обрабатывающий ошибки запросов.
+ */
 suspend fun requestExceptionHandler(
     onServerNotResponding: (ServerNotRespondingException) -> Unit = {},
     onConnectionError: (ConnectionErrorException) -> Unit = {},
