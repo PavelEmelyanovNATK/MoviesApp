@@ -16,18 +16,23 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:contentDescription="Movie image"/>
+            android:contentDescription="Movie image"
+            android:scaleType="centerCrop"
+            android:background="?attr/colorSecondaryVariant"/>
 
         <TextView
             android:id="@+id/movie_image_error"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_margin="8dp"
-            android:text="Изображение не найдено"/>
+            android:visibility="gone"
+            android:textAlignment="center"
+            android:textColor="?attr/colorOnSecondary"
+            android:text="Изображение не найдено" />
 
         <View
             android:id="@+id/movie_title_bg"

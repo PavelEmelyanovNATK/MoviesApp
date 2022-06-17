@@ -13,6 +13,7 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
@@ -21,7 +22,7 @@ import javax.inject.Singleton
 class MoviesModule {
 
     private val json = Json { ignoreUnknownKeys = true }
-    private val mediaType = MediaType.get("application/json; charset=utf-8")
+    private val mediaType = "application/json; charset=utf-8".toMediaType()
 
     @ExperimentalSerializationApi
     @Singleton

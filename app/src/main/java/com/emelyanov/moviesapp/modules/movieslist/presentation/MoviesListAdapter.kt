@@ -1,8 +1,10 @@
 package com.emelyanov.moviesapp.modules.movieslist.presentation
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.emelyanov.moviesapp.R
 import com.emelyanov.moviesapp.databinding.MoviesListGenreItemBinding
 import com.emelyanov.moviesapp.databinding.MoviesListHeaderItemBinding
@@ -57,8 +59,8 @@ class MoviesListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             is MoviesRecyclerItem.Genre -> {
                 val genre = holder as GenreViewHolder
                 genre.binding.genreName.text = item.name
-                val backgroundResource = if(item.isSelected) R.drawable.genre_item_background_selected else R.drawable.genre_item_background
-                genre.binding.root.setBackgroundResource(backgroundResource)
+                val background = if(item.isSelected) R.drawable.genre_item_background_selected else R.drawable.genre_item_background
+                genre.binding.root.setBackgroundResource(background)
                 genre.binding.root.setOnClickListener {
                     item.onClick()
                 }
@@ -69,13 +71,21 @@ class MoviesListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 movie.binding.root.setOnClickListener {
                     item.onClick()
                 }
+                movie.binding.movieImage.load(item.imageUrl) {
+                    this.listener(
+                        onStart = { _, ->
+                            movie.binding.movieImageError.visibility = View.GONE
+                        },
+                        onError = { _, _ ->
+                            movie.binding.movieImageError.visibility = View.VISIBLE
+                        }
+                    )
+                }
             }
         }
     }
 
-    override fun getItemCount(): Int {
-        return items.size
-    }
+    override fun getItemCount(): Int = builder.getItemsCount()
 
     override fun getItemViewType(position: Int): Int {
         return when(items[position]) {
@@ -102,6 +112,8 @@ class MoviesListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         fun addGenre(name: String, isSelected: Boolean, onClick: () -> Unit) = genres.add(MoviesRecyclerItem.Genre(name, isSelected, onClick))
         fun addMovie(name: String, imageUrl: String, onClick: () -> Unit) = movies.add(MoviesRecyclerItem.Movie(name, imageUrl, onClick))
+
+        internal fun getItemsCount() = genres.size + movies.size + 2
     }
 
     companion object {

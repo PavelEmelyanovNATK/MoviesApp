@@ -5,11 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".modules.moviedetails.presentation.MovieDetailsFragment"
-    android:background="?attr/android:colorBackground">
+    tools:context=".modules.moviedetails.presentation.MovieDetailsFragment">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/movie_image"
@@ -19,7 +18,8 @@
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="40dp"
             android:layout_marginTop="20dp"
-            android:contentDescription="Movie image" />
+            android:contentDescription="Movie image"
+            android:background="?attr/colorSecondaryVariant"/>
 
         <TextView
             android:id="@+id/movie_name"
