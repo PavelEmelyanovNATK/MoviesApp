@@ -22,7 +22,7 @@ typealias P = MoviesListPresenter
 @AndroidEntryPoint
 class MoviesListFragment : PresenterFragment<VS, V, P>(), V {
     lateinit var binding: FragmentMoviesListBinding
-    private val moviesAdapter = MoviesListAdapter()
+    private lateinit var moviesAdapter: MoviesListAdapter
 
     @Inject
     lateinit var presenterFactory: MoviesListPresenterFactory
@@ -32,6 +32,8 @@ class MoviesListFragment : PresenterFragment<VS, V, P>(), V {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMoviesListBinding.inflate(inflater, container, false)
+
+        moviesAdapter = MoviesListAdapter(requireActivity().application.applicationContext)
 
         val layoutManager = GridLayoutManager(requireContext(), 2, RecyclerView.VERTICAL, false).apply {
             spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {

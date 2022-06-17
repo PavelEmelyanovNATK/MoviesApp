@@ -17,7 +17,7 @@
     <fragment
         android:id="@+id/moviesListFragment"
         android:name="com.emelyanov.moviesapp.modules.movieslist.presentation.MoviesListFragment"
-        android:label="Главная"
+        android:label="@string/main_page_title"
         tools:layout="@layout/fragment_movies_list">
         <action
             android:id="@+id/navigateToDetails"

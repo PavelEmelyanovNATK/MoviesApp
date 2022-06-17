@@ -1,5 +1,6 @@
 package com.emelyanov.moviesapp.modules.movieslist.presentation
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +14,9 @@ import com.emelyanov.moviesapp.modules.movieslist.domain.models.MoviesRecyclerIt
 
 
 
-class MoviesListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MoviesListAdapter(
+    private val context: Context
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val items: List<MoviesRecyclerItem>
         get() = builder.build()
 
@@ -54,7 +57,7 @@ class MoviesListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         when(val item = items[position]) {
             is MoviesRecyclerItem.Header -> {
                 val header = holder as HeaderViewHolder
-                header.binding.title.text = item.title
+                header.binding.title.text = context.getString(item.resId)
             }
             is MoviesRecyclerItem.Genre -> {
                 val genre = holder as GenreViewHolder
@@ -104,9 +107,9 @@ class MoviesListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         private val movies: MutableList<MoviesRecyclerItem.Movie> = mutableListOf()
 
         fun build(): List<MoviesRecyclerItem> = ArrayList<MoviesRecyclerItem>(genres.size+movies.size+2).apply {
-            add(MoviesRecyclerItem.Header("Жанры"))
+            add(MoviesRecyclerItem.Header(R.string.genres_header))
             addAll(genres)
-            add(MoviesRecyclerItem.Header("Фильмы"))
+            add(MoviesRecyclerItem.Header(R.string.movies_header))
             addAll(movies)
         }
 

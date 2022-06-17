@@ -1,13 +1,17 @@
 package com.emelyanov.moviesapp.shared.di
 
+import android.content.Context
 import com.emelyanov.moviesapp.navigation.core.CoreNavProvider
 import com.emelyanov.moviesapp.shared.domain.services.moviesapi.IMoviesApi
 import com.emelyanov.moviesapp.shared.domain.services.moviesrepository.IMoviesRepository
 import com.emelyanov.moviesapp.shared.domain.services.moviesrepository.MoviesRepository
+import com.emelyanov.moviesapp.shared.domain.services.stringextractor.IStringExtractor
+import com.emelyanov.moviesapp.shared.domain.services.stringextractor.StringExtractor
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -39,4 +43,8 @@ class MoviesModule {
     @Singleton
     @Provides
     fun provideCoreNavProvider(): CoreNavProvider = CoreNavProvider()
+
+    @Singleton
+    @Provides
+    fun provideStringExtractor(@ApplicationContext context: Context): IStringExtractor = StringExtractor(context)
 }

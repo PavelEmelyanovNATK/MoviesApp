@@ -16,7 +16,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:contentDescription="Movie image"
+            android:contentDescription="@string/movie_image_description"
             android:scaleType="centerCrop"
             android:background="?attr/colorSecondaryVariant"/>
 
@@ -32,7 +32,7 @@
             android:visibility="gone"
             android:textAlignment="center"
             android:textColor="?attr/colorOnSecondary"
-            android:text="Изображение не найдено" />
+            android:text="@string/image_not_found_message" />
 
         <View
             android:id="@+id/movie_title_bg"
@@ -56,6 +56,6 @@
             android:ellipsize="end"
             android:textColor="@color/white"
             android:textAlignment="center"
-            android:text="TEasdasd" />
+            android:text="Test" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
