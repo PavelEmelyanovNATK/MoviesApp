@@ -12,6 +12,7 @@ abstract class BasePresenter<View: BaseView<ViewState>, ViewState>() {
 
     open fun bindView(view: View) {
         this.view = view
+        view.obtainState(viewState)
     }
 
     open fun unbindView() {
