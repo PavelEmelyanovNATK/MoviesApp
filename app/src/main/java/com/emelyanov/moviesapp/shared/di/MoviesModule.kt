@@ -1,6 +1,6 @@
-package com.emelyanov.moviesapp.shared.domain.di
+package com.emelyanov.moviesapp.shared.di
 
-import com.emelyanov.moviesapp.modules.movieslist.domain.utils.MoviesListPresenterFactory
+import com.emelyanov.moviesapp.navigation.core.CoreNavProvider
 import com.emelyanov.moviesapp.shared.domain.services.moviesapi.IMoviesApi
 import com.emelyanov.moviesapp.shared.domain.services.moviesrepository.IMoviesRepository
 import com.emelyanov.moviesapp.shared.domain.services.moviesrepository.MoviesRepository
@@ -8,11 +8,9 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.scopes.FragmentScoped
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
 import javax.inject.Singleton
@@ -38,7 +36,7 @@ class MoviesModule {
     @Provides
     fun provideMoviesRepository(moviesApi: IMoviesApi): IMoviesRepository = MoviesRepository(moviesApi)
 
-    //@Singleton
-    //@Provides
-    //fun provideMoviesPresenterFactory(moviesRepository: IMoviesRepository) = MoviesListPresenterFactory(moviesRepository)
+    @Singleton
+    @Provides
+    fun provideCoreNavProvider(): CoreNavProvider = CoreNavProvider()
 }

@@ -5,24 +5,25 @@ import com.emelyanov.moviesapp.modules.movieslist.domain.models.ViewGenre
 import com.emelyanov.moviesapp.modules.movieslist.domain.models.ViewMovie
 import com.emelyanov.moviesapp.modules.movieslist.domain.models.toViewGenre
 import com.emelyanov.moviesapp.modules.movieslist.domain.models.toViewMovie
+import com.emelyanov.moviesapp.navigation.core.CoreDestinations
+import com.emelyanov.moviesapp.navigation.core.CoreNavProvider
 import com.emelyanov.moviesapp.shared.domain.BasePresenter
 import com.emelyanov.moviesapp.shared.domain.BaseView
 import com.emelyanov.moviesapp.shared.domain.services.moviesrepository.IMoviesRepository
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.zip
+import com.emelyanov.moviesapp.shared.domain.utils.requestExceptionHandler
 import kotlinx.coroutines.launch
 
 private typealias VS = MoviesListPresenter.ViewState
 
 class MoviesListPresenter(
-    private val moviesRepository: IMoviesRepository
+    private val moviesRepository: IMoviesRepository,
+    private val coreNavProvider: CoreNavProvider
 ): BasePresenter<BaseView<VS>, VS>() {
 
     override var viewState: VS = ViewState.Loading
         set(value) {
             field = value
-            view?.obtainState(value)
+            view?.processState(value)
         }
 
     init {
@@ -31,49 +32,63 @@ class MoviesListPresenter(
 
     fun onGenreClick(genre: String) {
         if(viewState is ViewState.Presentation) {
-            val state = viewState as ViewState.Presentation
-            viewState = ViewState.Loading
-            val genres = moviesRepository.getGenres()
-            val curGenre = genres.find { it.name == genre } ?: return
-            val prevGenre = state.genres.find { it.isSelected }
+            presenterScope.launch {
+                listExceptionHandler {
+                    val state = viewState as ViewState.Presentation
+                    viewState = ViewState.Loading
+                    val genres = moviesRepository.getGenres()
+                    val curGenre = genres.find { it.name == genre } ?: return@listExceptionHandler
+                    val prevGenre = state.genres.find { it.isSelected }
+                    val movies = if(curGenre.name != prevGenre?.name)
+                        moviesRepository.getMovies(curGenre.name)
+                    else
+                        moviesRepository.getMovies()
 
-
-
-            val movies = if(curGenre.name != prevGenre?.name)
-                moviesRepository.getMovies(curGenre.name)
-            else
-                moviesRepository.getMovies()
-
-            viewState = ViewState.Presentation(
-                genres = genres.map {
-                    it.toViewGenre(
-                        isSelected = curGenre.name == it.name && curGenre.name != prevGenre?.name
+                    viewState = ViewState.Presentation(
+                        genres = genres.map {
+                            it.toViewGenre(
+                                isSelected = curGenre.name == it.name && curGenre.name != prevGenre?.name
+                            )
+                        },
+                        movies = movies.map { it.toViewMovie() }
                     )
-                },
-                movies = movies.map { it.toViewMovie() }
-            )
-        }
-    }
-
-    fun loadMovies() {
-        presenterScope.launch {
-            viewState = ViewState.Loading
-
-            viewState = try {
-                moviesRepository.refreshData()
-
-                val movies = moviesRepository.getMovies()
-                val genres = moviesRepository.getGenres()
-
-                ViewState.Presentation(
-                    genres = genres.map { it.toViewGenre() },
-                    movies = movies.map { it.toViewMovie() }
-                )
-            } catch (ex: Exception) {
-                ViewState.Error("")
+                }
             }
         }
     }
+
+    fun onMovieClick(id: Int) {
+        Log.d("Navigation id", id.toString())
+        coreNavProvider.requestNavigate(CoreDestinations.MovieDetails(id))
+    }
+
+    fun loadMovies() {
+        Log.d("Loading", "Started")
+        viewState = ViewState.Loading
+
+        presenterScope.launch {
+            listExceptionHandler {
+                    moviesRepository.refreshData()
+
+                    val movies = moviesRepository.getMovies()
+                    val genres = moviesRepository.getGenres()
+
+                    viewState = ViewState.Presentation(
+                        genres = genres.map { it.toViewGenre() },
+                        movies = movies.map { it.toViewMovie() }
+                    )
+            }
+        }
+    }
+
+    private suspend fun listExceptionHandler(block: suspend () -> Unit) = requestExceptionHandler(
+        onServerNotResponding = { viewState = ViewState.Error("Сервер не отвечает...") },
+        onConnectionError = { viewState = ViewState.Error("Ошибка подключения.") },
+        onNotFound = { viewState = ViewState.Error("Фильм не найден.") },
+        onBadRequest = { viewState = ViewState.Error("Неверный запрос: ${it.message}") },
+        onAnother = { viewState = ViewState.Error("Неизвестная ошибка: ${it.javaClass.simpleName}, ${it.message}") },
+        block = block
+    )
 
     sealed interface ViewState {
         object Loading : ViewState

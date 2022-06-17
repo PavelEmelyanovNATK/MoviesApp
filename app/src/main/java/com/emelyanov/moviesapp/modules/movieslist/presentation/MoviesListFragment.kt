@@ -51,19 +51,29 @@ class MoviesListFragment : PresenterFragment<VS, V, P>(), V {
         return binding.root
     }
 
-    override fun obtainState(viewState: MoviesListPresenter.ViewState) {
+    override fun processState(viewState: MoviesListPresenter.ViewState) {
         binding.moviesList.visibility = if(viewState is MoviesListPresenter.ViewState.Presentation) View.VISIBLE else View.GONE
         moviesAdapter.builder = MoviesListAdapter.MoviesRecyclerItemsBuilder().apply {
             if(viewState is MoviesListPresenter.ViewState.Presentation) {
                 viewState.genres.forEach {
-                    addGenre(it.name, it.isSelected) { presenter.onGenreClick(it.name) }
+                    addGenre(it.name, it.isSelected) {
+                        presenter.onGenreClick(it.name)
+                    }
                 }
                 viewState.movies.forEach {
-                    addMovie(it.localizedName, it.imageUrl) {}
+                    addMovie(it.localizedName, it.imageUrl) {
+                        presenter.onMovieClick(it.id)
+                    }
                 }
             }
         }
         binding.moviesProgressbar.visibility = if(viewState is MoviesListPresenter.ViewState.Loading) View.VISIBLE else View.GONE
+        binding.errorState.root.visibility = if(viewState is MoviesListPresenter.ViewState.Error) View.VISIBLE else View.GONE
+        binding.errorState.errorMessage.text = if(viewState is MoviesListPresenter.ViewState.Error) viewState.message else null
+
+        if(viewState is MoviesListPresenter.ViewState.Error) {
+            binding.errorState.refreshButton.setOnClickListener { presenter.loadMovies() }
+        }
     }
 
     override fun onResume() {

@@ -5,6 +5,7 @@ data class MovieDetails(
     val localizedName: String,
     val name: String,
     val imageUrl: String,
+    val year: Int,
     val rating: Float,
     val description: String,
 )

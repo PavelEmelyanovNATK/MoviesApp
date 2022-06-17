@@ -8,16 +8,24 @@
     <fragment
         android:id="@+id/movieDetailsFragment"
         android:name="com.emelyanov.moviesapp.modules.moviedetails.presentation.MovieDetailsFragment"
-        android:label="fragment_movie_details"
-        tools:layout="@layout/fragment_movie_details" />
+        tools:layout="@layout/fragment_movie_details" >
+        <argument
+            android:name="id"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
     <fragment
         android:id="@+id/moviesListFragment"
         android:name="com.emelyanov.moviesapp.modules.movieslist.presentation.MoviesListFragment"
-        android:label="fragment_movies_list"
-        tools:layout="@layout/fragment_movies_list" >
+        android:label="Главная"
+        tools:layout="@layout/fragment_movies_list">
         <action
-            android:id="@+id/go_to_details"
+            android:id="@+id/navigateToDetails"
             app:destination="@id/movieDetailsFragment"
-            app:launchSingleTop="true"/>
+            app:launchSingleTop="true" >
+            <argument
+                android:name="id"
+                android:defaultValue="-1" />
+        </action>
     </fragment>
 </navigation>

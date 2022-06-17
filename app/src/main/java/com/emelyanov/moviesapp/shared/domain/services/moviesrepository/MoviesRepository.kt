@@ -5,14 +5,24 @@ import com.emelyanov.moviesapp.shared.domain.models.Movie
 import com.emelyanov.moviesapp.shared.domain.models.MovieDetails
 import com.emelyanov.moviesapp.shared.domain.models.responses.MovieResponse
 import com.emelyanov.moviesapp.shared.domain.services.moviesapi.IMoviesApi
+import com.emelyanov.moviesapp.shared.domain.utils.*
 
 class MoviesRepository(
     private val moviesApi: IMoviesApi
 ) : IMoviesRepository {
     private var rawMovies: List<MovieResponse> = listOf()
 
+    /**
+     * @throws ServerNotRespondingException
+     * @throws ConnectionErrorException
+     * @throws NotFoundException
+     * @throws BadRequestException
+     * @throws Exception
+     */
     override suspend fun refreshData() {
-        rawMovies = moviesApi.getRawMoviesList().films
+        rawMovies = requestWrapper {
+            moviesApi.getRawMoviesList()
+        }.films
     }
 
     override fun getMovies(genre: String?): List<Movie> {
@@ -38,16 +48,17 @@ class MoviesRepository(
     }
 
     override fun getMovieDetails(id: Int): MovieDetails {
-        return rawMovies.first { it.id == id }
-            .let { movie ->
+        return rawMovies.find { it.id == id }
+            ?.let { movie ->
                 MovieDetails(
                     id = movie.id,
                     localizedName = movie.localizedName,
                     name = movie.name,
                     imageUrl = movie.imageUrl ?: "",
                     rating = movie.rating ?: 0f,
+                    year = movie.year,
                     description = movie.description ?: ""
                 )
-            }
+            } ?: throw NotFoundException()
     }
 }
