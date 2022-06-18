@@ -1,1 +1,1 @@
-[Работающий apk.][app-release.apk]
+[Работающий apk.](app-release.apk)
