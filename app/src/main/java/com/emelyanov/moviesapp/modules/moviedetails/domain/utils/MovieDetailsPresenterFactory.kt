@@ -17,7 +17,7 @@ class MovieDetailsPresenterFactory
 constructor(
     private val moviesRepository: IMoviesRepository,
     private val stringExtractor: IStringExtractor
-) : BasePresenterFactory<MovieDetailsPresenter>() {
+) : BasePresenterFactory<MovieDetailsPresenter> {
     override fun create(): MovieDetailsPresenter
     = MovieDetailsPresenter(moviesRepository, stringExtractor)
 }

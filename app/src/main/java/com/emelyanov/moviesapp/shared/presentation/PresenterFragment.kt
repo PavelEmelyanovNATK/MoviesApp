@@ -10,7 +10,7 @@ import com.emelyanov.moviesapp.shared.domain.BaseView
 import com.emelyanov.moviesapp.shared.domain.utils.PresenterLoader
 
 /**
- * Базовый класс фрагмент с реализацией сохранения презентера.
+ * Базовый класс фрагментa с реализацией сохранения презентера.
  */
 abstract class PresenterFragment<ViewState, View: BaseView<ViewState>, Presenter: BasePresenter<View, ViewState>>
     : Fragment(), LoaderManager.LoaderCallbacks<Presenter> {

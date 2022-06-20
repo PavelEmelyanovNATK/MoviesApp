@@ -29,10 +29,6 @@ class MoviesListPresenter(
             view?.processState(value)
         }
 
-    init {
-        Log.d("Repository", "Presenter created")
-    }
-
     fun onGenreClick(genre: String) {
         if(viewState is ViewState.Presentation) {
             presenterScope.launch {
@@ -68,12 +64,10 @@ class MoviesListPresenter(
     }
 
     fun onMovieClick(id: Int) {
-        Log.d("Navigation id", id.toString())
         coreNavProvider.requestNavigate(CoreDestinations.MovieDetails(id))
     }
 
     fun loadMovies() {
-        Log.d("Loading", "Started")
         viewState = ViewState.Loading
 
         presenterScope.launch {

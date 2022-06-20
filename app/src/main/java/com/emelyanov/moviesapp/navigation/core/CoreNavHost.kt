@@ -25,13 +25,10 @@ fun MainActivity.launchNavHost(
             coreNavProvider.observeNavigationFlow(this@repeatOnLifecycle) { destination ->
                 when (destination) {
                     is CoreDestinations.MoviesList -> coreNavController.navigate(R.id.moviesListFragment)
-                    is CoreDestinations.MovieDetails -> {
-                        Log.d("Navigation id", destination.id.toString())
-                        coreNavController.navigate(
+                    is CoreDestinations.MovieDetails -> coreNavController.navigate(
                             resId = R.id.navigateToDetails,
                             args = MovieDetailsFragment.createArguments(destination.id)
                         )
-                    }
                 }
             }
         }

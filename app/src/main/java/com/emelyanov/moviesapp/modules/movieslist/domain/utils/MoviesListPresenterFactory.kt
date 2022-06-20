@@ -17,7 +17,7 @@ constructor(
     private val moviesRepository: IMoviesRepository,
     private val coreNavProvider: CoreNavProvider,
     private val stringExtractor: IStringExtractor
-) : BasePresenterFactory<MoviesListPresenter>() {
+) : BasePresenterFactory<MoviesListPresenter> {
     override fun create(): MoviesListPresenter
     = MoviesListPresenter(moviesRepository, coreNavProvider, stringExtractor)
 }
